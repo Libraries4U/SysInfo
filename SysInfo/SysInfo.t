@@ -23,5 +23,3 @@ caES("Mode de gravaci\363 desconegut")
 esES("Modo de grabaci\303\263n desconocido")
 euES("Grabaketa mode ezezaguna")
 frFR("Mode d\351placement inconnu")
-
-
