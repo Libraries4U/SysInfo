@@ -1275,7 +1275,8 @@ String GetProcessFileName(int64 pid)
 }
 
 void GetWindowsList_Rec (_XDisplay *dpy, Window w, int depth, Array<int64> &wid) 
-{ 
+{
+#ifndef flagVIRTUALGUI
 	if (depth > 3) // 1 is enough for Gnome. 2 is necessary for Xfce and Kde
 		return; 
 
@@ -1294,12 +1295,14 @@ void GetWindowsList_Rec (_XDisplay *dpy, Window w, int depth, Array<int64> &wid)
 	}
 	if (children) 
 		XFree((char *)children); 
-	return; 
+	return;
+#endif
 }
 
 Array<int64> GetWindowsList()
 {
 	Array<int64> ret;	
+#ifndef flagVIRTUALGUI
 	SetSysInfoX11ErrorHandler();
 	
 	_XDisplay *dpy = XOpenDisplay (NULL);
@@ -1310,11 +1313,13 @@ Array<int64> GetWindowsList()
 	GetWindowsList_Rec (dpy, RootWindow(dpy, DefaultScreen(dpy)), 0, ret);
 	XCloseDisplay (dpy);
 	SetX11ErrorHandler();
+#endif
 	return ret;
 }
 
 void GetWindowsList(Array<int64> &hWnd, Array<int64> &processId, Array<String> &nameL, Array<String> &fileName, Array<String> &caption, bool getAll)
 {
+#ifndef flagVIRTUALGUI
 	SetSysInfoX11ErrorHandler();
 	_XDisplay *dpy = XOpenDisplay (NULL);
 	if (!dpy) {
@@ -1387,10 +1392,12 @@ void GetWindowsList(Array<int64> &hWnd, Array<int64> &processId, Array<String> &
 	XCloseDisplay (dpy);
 	SetX11ErrorHandler();
 	return;
+#endif
 }    
 
 bool WindowKill(int64 wid)
 {
+#ifndef flagVIRTUALGUI
 	if (wid == 0)
 		return false;
 	
@@ -1403,6 +1410,7 @@ bool WindowKill(int64 wid)
 	XSync (dpy, 0);
 	
 	XCloseDisplay (dpy);
+#endif
 	return true;	
 }
 
@@ -1907,13 +1915,14 @@ void Window_TopMost(int64 windowId)
 
 bool Window_GetRect(int64 windowId, int &left, int &top, int &right, int &bottom)
 {
+	bool ret = false;
+#ifndef flagVIRTUALGUI
 	SetSysInfoX11ErrorHandler();
 	_XDisplay *dpy = XOpenDisplay (NULL);
 	if (!dpy) {
 		SetX11ErrorHandler();
 		return false;
 	}
-	bool ret = false;
 	Window rt;
 	int x, y;//, rx, ry; 
 	unsigned int width, height, bw, depth_; 
@@ -1926,18 +1935,21 @@ bool Window_GetRect(int64 windowId, int &left, int &top, int &right, int &bottom
 	}
 	XCloseDisplay (dpy);
 	SetX11ErrorHandler();
+#endif
 	return ret; 
 }
 
 bool Window_SetRect(int64 windowId, int left, int top, int right, int bottom)
 {
+	bool ret = false;
+
+#ifndef flagVIRTUALGUI
 	SetSysInfoX11ErrorHandler();
 	_XDisplay *dpy = XOpenDisplay (NULL);
 	if (!dpy) {
 		SetX11ErrorHandler();
 		return false;
 	}
-	bool ret = false;
 
 	if (XMoveWindow(dpy, windowId, left, top)) {
 		if (!XResizeWindow(dpy, windowId, right-left, bottom-top))
@@ -1947,6 +1959,7 @@ bool Window_SetRect(int64 windowId, int left, int top, int right, int bottom)
 	}
 	XCloseDisplay (dpy);
 	SetX11ErrorHandler();
+#endif
 	return ret; 
 }
 

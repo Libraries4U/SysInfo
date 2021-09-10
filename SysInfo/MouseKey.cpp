@@ -1,5 +1,6 @@
 #include "SysInfo_in.h"
 
+#ifndef flagVIRTUALGUI
 
 namespace Upp {
 
@@ -473,5 +474,4 @@ void Keyb_SendKeys(String text, long finalDelay, long delayBetweenKeys)
 
 }
 
-
-
+#endif

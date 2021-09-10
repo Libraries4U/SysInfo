@@ -4,6 +4,7 @@
 #include <plugin/jpg/jpg.h>
 #include <plugin/bmp/bmp.h>
 
+#ifndef flagVIRTUALGUI
 
 namespace Upp {
 
@@ -633,3 +634,5 @@ Image Snap_Window(int64 handle)
 }
 
 }
+
+#endif
